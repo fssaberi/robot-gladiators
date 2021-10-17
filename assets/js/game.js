@@ -42,17 +42,23 @@ var fightOrSkip = function () {
 
 // fight function
 var fight = function(enemy) {
+    //keep track of who goes first
+    var isPlayerTurn = true;
+
+    // randomly change turn order
+    if (Math.random() > 0.5){
+        isPlayerTurn = false;
+    }
+
+
     // repeat and execute as long as the enemy-robot is alive
-    while (playerHealth > 0 && enemy.health > 0) {
+    while (playerInfo.health > 0 && enemy.health > 0) {
+        if (isPlayerTurn) {
         // ask player if they'd like to fight or skip using fightOrSkip function
         if (fightOrSkip()) {
             // if true, leave fight by breaking loop
             break;
         }
-
-        fightOrSkip(); // <-- Replace code with this function call
-        var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
-    }
 
     // generate random damage value based on player's attack power
     var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
@@ -76,11 +82,12 @@ var fight = function(enemy) {
     }   else {
         window.alert(enemy.name + " still has " + enemy.health + " health left."); 
     }
-
-    // Subtract the value of 'enemy.attack' from the value of 'playerHealth' and use that result to update the value in the 'playerHealth' variable.
+    // player gets attacked first
+} else {
     var damage = randomNumber(enemy.attack - 3, enemy.attack);
     
-    playerHealth = Math.max(0, playerHealth - damage);
+    // remove player's health by subtracting the amount we set in the damage variable
+    playerInfo.health = Math.max(0, playerInfo.health - damage);
 
     // Log a resulting message to the console so we know that it worked.
     console.log(
@@ -95,6 +102,9 @@ var fight = function(enemy) {
     }   else {
         window.alert(playerInfo.name + " still has " + playerInfo.health + " health left.");
     }   
+  }
+  // switch turn order for next round
+  isPlayerTurn = !isPlayerTurn;
   }
 };
 
@@ -250,7 +260,7 @@ var enemyInfo = [
 console.log(enemyInfo);
 console.log(enemyInfo[0]);
 console.log(enemyInfo[0].name);
-console.log(enemyinfo[0]['attack']);
+console.log(enemyInfo[0]['attack']);
 
 // start the game when the page loads
 startGame();
